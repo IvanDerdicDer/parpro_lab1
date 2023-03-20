@@ -71,7 +71,7 @@ def philosopher(
         logging.info(f"Philosopher {philosopher_id} has finished thinking.")
 
         while not (left_fork and right_fork):
-            if not left_fork:  # Send a request for the left fork if there is no left fork
+            if not left_fork and not has_sent_left:  # Send a request for the left fork if there is no left fork
                 comm.send(Requests.FORK, left_philosopher)
                 if not has_sent_left:
                     print(
@@ -80,7 +80,7 @@ def philosopher(
                         f"Philosopher {philosopher_id} sent a request for his left fork to philosopher {left_philosopher}.")
                 has_sent_left = True
 
-            if not right_fork:  # Send a request for the right fork if there is no right fork
+            if not right_fork and not has_sent_right:  # Send a request for the right fork if there is no right fork
                 comm.send(Requests.FORK, right_philosopher)
                 if not has_sent_right:
                     print(
@@ -124,6 +124,9 @@ def philosopher(
                     right_fork = copy(message)
                     print('\t' * philosopher_id + f"Philosopher {philosopher_id} received his right fork.")
                     logging.info(f"Philosopher {philosopher_id} received his right fork.")
+
+        has_sent_right = False
+        has_sent_left = False
 
         print('\t' * philosopher_id + f"Philosopher {philosopher_id} is eating.")
         logging.info(f"Philosopher {philosopher_id} is eating.")
@@ -189,5 +192,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception:
+    except Exception as e:
         logging.error(traceback.format_exc())
+        raise e
