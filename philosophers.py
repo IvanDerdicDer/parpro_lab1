@@ -42,7 +42,7 @@ def philosopher(
     while True:
         start_time = MPI.Wtime()
 
-        print(f"Philosopher {philosopher_id} is thinking.")
+        print('    ' * philosopher_id + f"Philosopher {philosopher_id} is thinking.")
         logging.info(f"Philosopher {philosopher_id} is thinking.")
 
         while (MPI.Wtime() - start_time) < 2:
@@ -53,7 +53,7 @@ def philosopher(
                 if message == Requests.FORK and left_fork:
                     left_fork.is_clean = True
                     comm.send(left_fork, left_philosopher)
-                    print('\t' * philosopher_id + f"Philosopher {philosopher_id} sent his left fork to philosopher {left_philosopher}")
+                    print('    ' * philosopher_id + f"Philosopher {philosopher_id} sent his left fork to philosopher {left_philosopher}")
                     logging.info(f"Philosopher {philosopher_id} sent his left fork to philosopher {left_philosopher}")
                     left_fork = None
 
@@ -63,11 +63,11 @@ def philosopher(
                 if message == Requests.FORK and right_fork:
                     right_fork.is_clean = True
                     comm.send(right_fork, right_philosopher)
-                    print('\t' * philosopher_id + f"Philosopher {philosopher_id} sent his right fork to philosopher {right_philosopher}")
+                    print('    ' * philosopher_id + f"Philosopher {philosopher_id} sent his right fork to philosopher {right_philosopher}")
                     logging.info(f"Philosopher {philosopher_id} sent his right fork to philosopher {right_philosopher}")
                     right_fork = None
 
-        print('\t' * philosopher_id + f"Philosopher {philosopher_id} has finished thinking.")
+        print('    ' * philosopher_id + f"Philosopher {philosopher_id} has finished thinking.")
         logging.info(f"Philosopher {philosopher_id} has finished thinking.")
 
         while not (left_fork and right_fork):
@@ -75,7 +75,7 @@ def philosopher(
                 comm.send(Requests.FORK, left_philosopher)
                 if not has_sent_left:
                     print(
-                        '\t' * philosopher_id + f"Philosopher {philosopher_id} sent a request for his left fork to philosopher {left_philosopher}.")
+                        '    ' * philosopher_id + f"Philosopher {philosopher_id} sent a request for his left fork to philosopher {left_philosopher}.")
                     logging.info(
                         f"Philosopher {philosopher_id} sent a request for his left fork to philosopher {left_philosopher}.")
                 has_sent_left = True
@@ -84,7 +84,7 @@ def philosopher(
                 comm.send(Requests.FORK, right_philosopher)
                 if not has_sent_right:
                     print(
-                        '\t' * philosopher_id + f"Philosopher {philosopher_id} sent a request for his right fork to philosopher {right_philosopher}.")
+                        '    ' * philosopher_id + f"Philosopher {philosopher_id} sent a request for his right fork to philosopher {right_philosopher}.")
                     logging.info(
                         f"Philosopher {philosopher_id} sent a request for his right fork to philosopher {right_philosopher}.")
                 has_sent_right = True
@@ -95,7 +95,7 @@ def philosopher(
                 if message == Requests.FORK and left_fork and not left_fork.is_clean:
                     left_fork.is_clean = True
                     comm.send(left_fork, left_philosopher)
-                    print('\t' * philosopher_id + f"Philosopher {philosopher_id} sent his left fork to philosopher {left_philosopher}")
+                    print('    ' * philosopher_id + f"Philosopher {philosopher_id} sent his left fork to philosopher {left_philosopher}")
                     logging.info(f"Philosopher {philosopher_id} sent his left fork to philosopher {left_philosopher}")
                     left_fork = None
 
@@ -104,7 +104,7 @@ def philosopher(
 
                 if isinstance(message, Fork):
                     left_fork = copy(message)
-                    print('\t' * philosopher_id + f"Philosopher {philosopher_id} received his left fork.")
+                    print('    ' * philosopher_id + f"Philosopher {philosopher_id} received his left fork.")
                     logging.info(f"Philosopher {philosopher_id} received his left fork.")
 
             if comm.iprobe(source=right_philosopher):
@@ -113,7 +113,7 @@ def philosopher(
                 if message == Requests.FORK and right_fork and not right_fork.is_clean:
                     right_fork.is_clean = True
                     comm.send(right_fork, left_philosopher)
-                    print('\t' * philosopher_id + f"Philosopher {philosopher_id} sent his right fork to philosopher {right_philosopher}")
+                    print('    ' * philosopher_id + f"Philosopher {philosopher_id} sent his right fork to philosopher {right_philosopher}")
                     logging.info(f"Philosopher {philosopher_id} sent his right fork to philosopher {right_philosopher}")
                     right_fork = None
 
@@ -122,13 +122,13 @@ def philosopher(
 
                 if isinstance(message, Fork):
                     right_fork = copy(message)
-                    print('\t' * philosopher_id + f"Philosopher {philosopher_id} received his right fork.")
+                    print('    ' * philosopher_id + f"Philosopher {philosopher_id} received his right fork.")
                     logging.info(f"Philosopher {philosopher_id} received his right fork.")
 
         has_sent_right = False
         has_sent_left = False
 
-        print('\t' * philosopher_id + f"Philosopher {philosopher_id} is eating.")
+        print('    ' * philosopher_id + f"Philosopher {philosopher_id} is eating.")
         logging.info(f"Philosopher {philosopher_id} is eating.")
         start_time = MPI.Wtime()
 
@@ -146,7 +146,7 @@ def philosopher(
                 if message == Requests.FORK and right_fork:
                     send_right_fork = True
 
-        print('\t' * philosopher_id + f"Philosopher {philosopher_id} has finished eating.")
+        print('    ' * philosopher_id + f"Philosopher {philosopher_id} has finished eating.")
         logging.info(f"Philosopher {philosopher_id} has finished eating.")
         left_fork.is_clean = False
 
@@ -155,14 +155,14 @@ def philosopher(
         if send_left_fork:
             left_fork.is_clean = True
             comm.send(left_fork, left_philosopher)
-            print('\t' * philosopher_id + f"Philosopher {philosopher_id} sent his left fork to philosopher {left_philosopher}")
+            print('    ' * philosopher_id + f"Philosopher {philosopher_id} sent his left fork to philosopher {left_philosopher}")
             logging.info(f"Philosopher {philosopher_id} sent his left fork to philosopher {left_philosopher}")
             left_fork = None
 
         if send_right_fork:
             right_fork.is_clean = True
             comm.send(right_fork, right_philosopher)
-            print('\t' * philosopher_id + f"Philosopher {philosopher_id} sent his right fork to philosopher {right_philosopher}")
+            print('    ' * philosopher_id + f"Philosopher {philosopher_id} sent his right fork to philosopher {right_philosopher}")
             logging.info(f"Philosopher {philosopher_id} sent his right fork to philosopher {right_philosopher}")
             right_fork = None
 
