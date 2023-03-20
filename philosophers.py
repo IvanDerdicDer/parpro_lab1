@@ -133,6 +133,7 @@ def philosopher(
         start_time = MPI.Wtime()
 
         while (MPI.Wtime() - start_time) < 5:
+            sleep(0.1)
             if comm.iprobe(left_philosopher):
                 message = comm.recv(source=left_philosopher)
 
